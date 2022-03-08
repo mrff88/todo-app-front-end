@@ -15,9 +15,9 @@ export default function Formulario(props) {
     } else {
       // editar una tarea
       props.handleEditar({
-        id: props.editable.id,
-        titulo: titulo,
-        completado: props.editable.completado,
+        id: props.editable._id,
+        title: titulo,
+        isComplete: props.editable.isComplete,
       });
     }
     // limpiar el formulario
@@ -27,7 +27,7 @@ export default function Formulario(props) {
   // dos ciclos de vida, cuando el componente se monta por primera vez y cuando el componente se actualiza segun una propiedad de su estado
   useEffect(() => {
     if (props.editable) {
-      setTitulo(props.editable.titulo);
+      setTitulo(props.editable.title);
     }
   }, [props.editable]);
 

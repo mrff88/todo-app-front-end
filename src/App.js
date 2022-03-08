@@ -1,6 +1,14 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { taskActions } from './redux/taskSlice';
+import {
+  createTaskAsync,
+  getAllTaskAsync,
+  selectCreatedTask,
+  selectEditedTask,
+  selectTasks,
+  taskActions,
+  updateTaskAsync,
+} from './redux/taskSlice';
 import { msgActions } from './redux/messageSlice';
 
 import Formulario from './formulario';
@@ -10,13 +18,22 @@ import Alert from './alert';
 function App() {
   const [editable, setEditable] = useState(null);
 
-  const tasks = useSelector((state) => state.tasks.taskList);
+  const tasks = useSelector(selectTasks);
+  const newTask = useSelector(selectCreatedTask);
+  const editedTask = useSelector(selectEditedTask);
   const message = useSelector((state) => state.message);
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    (Object.keys(newTask).length !== 0 ||
+      Object.keys(editedTask).length !== 0) &&
+      dispatch(getAllTaskAsync());
+  }, [dispatch, editedTask, newTask]);
+
   // función para agregar una nueva tarea
   const handleRegistrar = (tarea) => {
-    dispatch(taskActions.createTodo(tarea));
+    // dispatch(taskActions.createTodo(tarea));
+    dispatch(createTaskAsync(tarea));
     dispatch(msgActions.createTaskMessage());
   };
 
@@ -33,7 +50,8 @@ function App() {
 
   // funcion para editar una tarea
   const handleEditar = (nuevaTarea) => {
-    dispatch(taskActions.editTodo(nuevaTarea));
+    // dispatch(taskActions.editTodo(nuevaTarea));
+    dispatch(updateTaskAsync(nuevaTarea));
     dispatch(msgActions.editTaskMessage());
     setEditable(null);
   };
