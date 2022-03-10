@@ -22,8 +22,10 @@ const initialState = {
   isLoading: false,
   isCreating: false,
   isEditing: false,
+  isDeleting: false,
   created: {},
   edited: {},
+  deleted: {},
 };
 
 export const getAllTaskAsync = createAsyncThunk('tasks/getAll', async () => {
@@ -48,23 +50,15 @@ export const updateTaskAsync = createAsyncThunk(
   }
 );
 
+export const deleteTaskAsync = createAsyncThunk('tasks/delete', async (id) => {
+  const response = await taskCtlr.deleteTask(id);
+  return response.data;
+});
+
 const taskSlice = createSlice({
   name: 'tasks',
   initialState,
-  reducers: {
-    toggleTodo(state, action) {
-      state.taskList = state.taskList.map((tarea) =>
-        tarea.id === action.payload
-          ? { ...tarea, completado: !tarea.completado }
-          : tarea
-      );
-    },
-    deleteTodo(state, action) {
-      state.taskList = state.taskList
-        .map((tarea) => (tarea.id === action.payload ? null : tarea))
-        .filter((tarea) => tarea != null);
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getAllTaskAsync.pending, (state) => {
@@ -87,6 +81,13 @@ const taskSlice = createSlice({
       .addCase(updateTaskAsync.fulfilled, (state, { payload: asyncTask }) => {
         state.isEditing = false;
         state.edited = asyncTask;
+      })
+      .addCase(deleteTaskAsync.pending, (state) => {
+        state.isDeleting = true;
+      })
+      .addCase(deleteTaskAsync.fulfilled, (state, { payload: asyncTask }) => {
+        state.isDeleting = false;
+        state.deleted = asyncTask;
       });
   },
 });
@@ -96,7 +97,9 @@ export const taskActions = taskSlice.actions;
 export const selectTasks = (state) => state.tasks.taskList;
 export const selectIsLoading = (state) => state.tasks.isLoading;
 export const selectIsCreating = (state) => state.tasks.isCreating;
+export const selectIsDeleting = (state) => state.tasks.isDeleting;
 export const selectCreatedTask = (state) => state.tasks.created;
 export const selectEditedTask = (state) => state.tasks.edited;
+export const selectDeletedTask = (state) => state.tasks.deleted;
 
 export default taskSlice;

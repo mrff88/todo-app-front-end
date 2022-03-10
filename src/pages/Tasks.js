@@ -2,44 +2,47 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createTaskAsync,
+  deleteTaskAsync,
   getAllTaskAsync,
   selectCreatedTask,
+  selectDeletedTask,
   selectEditedTask,
   selectTasks,
-  taskActions,
   updateTaskAsync,
-} from './redux/taskSlice';
-import { msgActions } from './redux/messageSlice';
+} from '../redux/taskSlice';
+import { msgActions } from '../redux/messageSlice';
 
-import Formulario from './formulario';
-import ListaTareas from './listaTareas';
-import Alert from './alert';
+import Formulario from '../components/formulario';
+import ListaTareas from '../components/listaTareas';
+import Alert from '../components/alert';
 
-function App() {
+function Tasks() {
   const [editable, setEditable] = useState(null);
 
   const tasks = useSelector(selectTasks);
   const newTask = useSelector(selectCreatedTask);
   const editedTask = useSelector(selectEditedTask);
+  const deletedTask = useSelector(selectDeletedTask);
   const message = useSelector((state) => state.message);
   const dispatch = useDispatch();
 
   useEffect(() => {
     (Object.keys(newTask).length !== 0 ||
-      Object.keys(editedTask).length !== 0) &&
+      Object.keys(editedTask).length !== 0 ||
+      Object.keys(deletedTask).length !== 0) &&
       dispatch(getAllTaskAsync());
-  }, [dispatch, editedTask, newTask]);
+  }, [dispatch, deletedTask, editedTask, newTask]);
 
   // función para agregar una nueva tarea
   const handleRegistrar = (tarea) => {
-    // dispatch(taskActions.createTodo(tarea));
     dispatch(createTaskAsync(tarea));
     dispatch(msgActions.createTaskMessage());
   };
 
   // función para cambiar el estado de una tarea
   const handleToggle = (id) => {
-    dispatch(taskActions.toggleTodo(id));
+    const toggledTask = { ...tasks.find((tarea) => tarea._id === id) };
+    dispatch(updateTaskAsync({ id, isComplete: !toggledTask.isComplete }));
     dispatch(msgActions.editTaskMessage());
   };
 
@@ -50,7 +53,6 @@ function App() {
 
   // funcion para editar una tarea
   const handleEditar = (nuevaTarea) => {
-    // dispatch(taskActions.editTodo(nuevaTarea));
     dispatch(updateTaskAsync(nuevaTarea));
     dispatch(msgActions.editTaskMessage());
     setEditable(null);
@@ -58,7 +60,7 @@ function App() {
 
   // Eliminar una tarea
   const handleEliminar = (id) => {
-    dispatch(taskActions.deleteTodo(id));
+    dispatch(deleteTaskAsync(id));
     dispatch(msgActions.deleteTaskMessage());
   };
 
@@ -86,4 +88,4 @@ function App() {
   );
 }
 
-export default App;
+export default Tasks;

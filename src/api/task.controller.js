@@ -40,3 +40,14 @@ export const updateTask = async ({ id, ...task }) => {
     console.log(error);
   }
 };
+
+export const deleteTask = async (id) => {
+  const url = `${API_SERVER}${ENDPOINTS.DELETE}/${id}`;
+
+  try {
+    const response = await axios.delete(url);
+    return response;
+  } catch (error) {
+    console.log(error);
+  }
+};
