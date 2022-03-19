@@ -9,8 +9,8 @@ import {
   selectEditedTask,
   selectTasks,
   updateTaskAsync,
-} from '../redux/taskSlice';
-import { msgActions } from '../redux/messageSlice';
+} from '../redux/slices/taskSlice';
+import { msgActions } from '../redux/slices/messageSlice';
 
 import Formulario from '../components/formulario';
 import ListaTareas from '../components/listaTareas';
