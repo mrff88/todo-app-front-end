@@ -1,24 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import taskCtlr from '../api';
+import { taskCtlr } from '../../api';
 
 const initialState = {
-  taskList: [
-    {
-      id: 1,
-      titulo: 'Comprar leche',
-      completado: false,
-    },
-    {
-      id: 2,
-      titulo: 'Hacer presentación de React',
-      completado: true,
-    },
-    {
-      id: 3,
-      titulo: 'Sacar la basura',
-      completado: false,
-    },
-  ],
+  taskList: [],
   isLoading: false,
   isCreating: false,
   isEditing: false,
