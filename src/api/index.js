@@ -1,3 +1,4 @@
 import * as taskCtlr from './task.controller';
+import * as userCtlr from './user.controller';
 
-export default taskCtlr;
+export { taskCtlr, userCtlr };
