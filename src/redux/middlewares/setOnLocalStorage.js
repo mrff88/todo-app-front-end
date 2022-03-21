@@ -14,7 +14,6 @@ const setOnLocalStorage = (store, action) => {
       break;
 
     default:
-      console.log(action.type);
       break;
   }
 };
