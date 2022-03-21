@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from '../components/Navigation';
 import Login from '../pages/Login';
-import PasswordRecovery from '../pages/PasswordRecovery';
+import ResetPassword from '../pages/ResetPassword';
 import Register from '../pages/Register';
 import Tasks from '../pages/Tasks';
 import VerifyEmail from '../pages/VerifyEmail';
@@ -11,6 +11,7 @@ import { selectToken } from '../redux/slices/userSlice';
 import HideIfLogged from '../util/HideIfLogged';
 import parseJwt from '../util/parseJWT';
 import RequireAuth from '../util/RequiresAuth';
+import ChangePassword from '../pages/ChangePassword';
 
 const App = () => {
   const token = useSelector(selectToken);
@@ -41,10 +42,19 @@ const App = () => {
         />
         <Route
           exact
-          path="/password-recovery"
+          path="/reset-password"
           element={
             <HideIfLogged>
-              <PasswordRecovery />
+              <ResetPassword />
+            </HideIfLogged>
+          }
+        />
+        <Route
+          exact
+          path="/change-password/:id/:token"
+          element={
+            <HideIfLogged>
+              <ChangePassword />
             </HideIfLogged>
           }
         />
