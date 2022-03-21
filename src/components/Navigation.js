@@ -51,7 +51,7 @@ const Navigation = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/password-recovery">
+                  <Link className="nav-link" to="/reset-password">
                     Recuperar contraseña
                   </Link>
                 </li>
